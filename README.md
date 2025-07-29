@@ -110,7 +110,7 @@ TagForge/
 
 ## Version Information
 
-**Current Version:** 0.0.44
+**Current Version:** 0.0.45
 
 **Release Date:** July 2025
 
@@ -120,6 +120,7 @@ TagForge/
 
 ### Version History
 
+- **0.0.45** - Removed header text, restored feature buttons, streamlined interface
 - **0.0.44** - Optimized codebase, removed unused libraries, improved print layout
 - **0.0.43** - Previous version with full feature set
 - **0.0.42** - Initial barcode-fallback implementation
