@@ -1,4 +1,4 @@
-// TagForge Application - Version 4.4
+// TagForge Application - Version 0.0.44
 // Main Application JavaScript
 
 class TagForge {

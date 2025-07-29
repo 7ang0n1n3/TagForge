@@ -105,3 +105,21 @@ TagForge/
 - Modern browsers with HTML5 Canvas support
 - File API support for Excel/CSV upload
 - Blob API support for file downloads
+
+---
+
+## Version Information
+
+**Current Version:** 0.0.44
+
+**Release Date:** July 2025
+
+**Author:** 7ANG0N1N3
+
+**GitHub:** https://github.com/tagforge/tagforge
+
+### Version History
+
+- **0.0.44** - Optimized codebase, removed unused libraries, improved print layout
+- **0.0.43** - Previous version with full feature set
+- **0.0.42** - Initial barcode-fallback implementation
