@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TagForge - Offline Barcode Generator</title>
+    
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="libs/ui/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/ui/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    
+    <!-- JavaScript Libraries -->
+    <script src="libs/ui/bootstrap.bundle.min.js"></script>
+    <script src="libs/barcode/bwip-js.min.js"></script>
+    <script src="libs/qrcode/qrcode.min.js"></script>
+    <script src="libs/excel/xlsx.full.min.js"></script>
+    <script src="libs/utils/FileSaver.min.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="assets/js/barcode-fallback.js"></script>
+    <script src="assets/js/app.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-upc-scan"></i> TagForge
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#generator">Generator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#bulk">Bulk Generate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Home Section -->
+        <section id="home" class="mb-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 mb-4">TagForge</h1>
+                    <p class="lead mb-4">Professional offline barcode generation system</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-upc-scan display-4 text-primary"></i>
+                                    <h5 class="card-title">Single Barcode</h5>
+                                    <p class="card-text">Generate individual barcodes with custom settings</p>
+                                    <a href="#generator" class="btn btn-primary">Generate</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-spreadsheet display-4 text-success"></i>
+                                    <h5 class="card-title">Bulk Generation</h5>
+                                    <p class="card-text">Import Excel/CSV data for batch barcode creation</p>
+                                    <a href="#bulk" class="btn btn-success">Bulk Generate</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-printer display-4 text-warning"></i>
+                                    <h5 class="card-title">Print Labels</h5>
+                                    <p class="card-text">Print barcode labels in various formats</p>
+                                    <a href="#generator" class="btn btn-warning">Print</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Single Barcode Generator -->
+        <section id="generator" class="mb-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-center mb-4">Single Barcode Generator</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="barcodeForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeType" class="form-label">Barcode Type</label>
+                                            <select class="form-select" id="barcodeType" required>
+                                                <option value="">Select barcode type</option>
+                                                <option value="CODE128">Code 128</option>
+                                                <option value="CODE39">Code 39</option>
+                                                <option value="QR">QR Code</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="barcodeData" class="form-label">Barcode Data</label>
+                                            <input type="text" class="form-control" id="barcodeData" placeholder="Code 128: any text, Code 39: alphanumeric, QR: any text" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="barcodeWidth" class="form-label">Width</label>
+                                            <input type="range" class="form-range" id="barcodeWidth" min="1" max="5" value="2" step="0.1">
+                                            <div class="form-text">Current: <span id="widthValue">2</span></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="barcodeHeight" class="form-label">Height</label>
+                                            <input type="range" class="form-range" id="barcodeHeight" min="5" max="30" value="20">
+                                            <div class="form-text">Current: <span id="heightValue">20</span>px</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="barcodeDisplayValue" class="form-label">Display Value</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="barcodeDisplayValue" checked>
+                                                <label class="form-check-label" for="barcodeDisplayValue">
+                                                    Show text below barcode
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="barcodeFontSize" class="form-label">Font Size</label>
+                                            <input type="range" class="form-range" id="barcodeFontSize" min="5" max="20" value="12">
+                                            <div class="form-text">Current: <span id="fontSizeValue">12</span>px</div>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">Generate Barcode</button>
+                                </div>
+                            </form>
+                            
+                            <!-- Barcode Preview (hidden by default) -->
+                            <div id="barcodePreview" class="mt-4" style="display: none;">
+                                <h3 class="text-center mb-4">Generated Barcode</h3>
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <div id="barcodeContainer" class="mb-3">
+                                            <!-- Barcode will be generated here -->
+                                        </div>
+                                                                        <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-success" onclick="downloadBarcode()">
+                                        <i class="bi bi-download"></i> Download PNG
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="printBarcode()">
+                                        <i class="bi bi-printer"></i> Print
+                                    </button>
+                                </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Bulk Generation -->
+        <section id="bulk" class="mb-5">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h2 class="text-center mb-4">Bulk Barcode Generation</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Import Data</h5>
+                                    <div class="mb-3">
+                                        <label for="excelFile" class="form-label">Excel/CSV File</label>
+                                        <input type="file" class="form-control" id="excelFile" accept=".xlsx,.xls,.csv">
+                                        <div class="form-text">Upload Excel or CSV file with barcode data</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="dataColumn" class="form-label">Data Column</label>
+                                        <select class="form-select" id="dataColumn">
+                                            <option value="">Select column after file upload</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="processExcelFile()">
+                                        <i class="bi bi-upload"></i> Process File
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Preview Data</h5>
+                                    <div id="dataPreview" class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                        <p class="text-muted">Upload a file to preview data</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Barcode Configuration Options -->
+                            <hr class="my-4">
+                            <h5>Barcode Settings</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="bulkBarcodeType" class="form-label">Barcode Type</label>
+                                        <select class="form-select" id="bulkBarcodeType">
+                                            <option value="CODE128">Code 128</option>
+                                            <option value="CODE39">Code 39</option>
+                                            <option value="QR">QR Code</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bulkWidth" class="form-label">Width</label>
+                                        <input type="range" class="form-range" id="bulkWidth" min="1" max="5" value="2" step="0.5">
+                                        <div class="form-text">Current: <span id="bulkWidthValue">2</span></div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bulkHeight" class="form-label">Height</label>
+                                        <input type="range" class="form-range" id="bulkHeight" min="5" max="30" value="20">
+                                        <div class="form-text">Current: <span id="bulkHeightValue">20px</span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="bulkDisplayValue" checked>
+                                            <label class="form-check-label" for="bulkDisplayValue">
+                                                Show text below barcode
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bulkFontSize" class="form-label">Font Size</label>
+                                        <input type="range" class="form-range" id="bulkFontSize" min="5" max="20" value="12">
+                                        <div class="form-text">Current: <span id="bulkFontSizeValue">12px</span></div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bulk Results -->
+        <section id="bulkResults" class="mb-5" style="display: none;">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h3 class="text-center mb-4">Generated Barcodes</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="bulkBarcodes" class="row"></div>
+                            <div class="text-center mt-3">
+                                <button type="button" class="btn btn-success" onclick="downloadAllBarcodes()">
+                                    <i class="bi bi-download"></i> Download All
+                                </button>
+                                <button type="button" class="btn btn-warning" onclick="printAllBarcodes()">
+                                    <i class="bi bi-printer"></i> Print All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="mb-5">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-center mb-4">About TagForge</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>TagForge is a comprehensive offline barcode generation system that provides professional-grade barcode creation capabilities without requiring internet connectivity.</p>
+                            <h5>Supported Barcode Types:</h5>
+                            <ul>
+                                <li><strong>Code 128:</strong> High-density alphanumeric barcode</li>
+                                <li><strong>Code 39:</strong> Industrial barcode standard</li>
+                                <li><strong>QR Code:</strong> 2D matrix barcode</li>
+                            </ul>
+                            <h5>Features:</h5>
+                            <ul>
+                                <li>Single barcode generation with custom settings</li>
+                                <li>Bulk generation from Excel/CSV files</li>
+                                <li>Multiple export formats (PNG, PDF)</li>
+                                <li>Print-ready label generation</li>
+                                <li>Completely offline operation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 TagForge. All rights reserved.</p>
+            <p class="small">Offline barcode generation system</p>
+        </div>
+    </footer>
+</body>
+</html> 
