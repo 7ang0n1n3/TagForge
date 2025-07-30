@@ -26,6 +26,8 @@ TagForge/
 │   │   └── qrcode.min.js   # QR code generator
 │   ├── excel/              # Excel/CSV processing libraries
 │   │   └── xlsx.full.min.js # Excel/CSV file processing
+│   ├── papertemplate/      # Paper template definitions
+│   │   └── paper-templates.js # Paper template configurations
 │   ├── ui/                 # UI framework libraries
 │   │   ├── bootstrap.min.css
 │   │   ├── bootstrap.bundle.min.js
@@ -71,8 +73,52 @@ TagForge/
 
 ### Print Labels
 1. Generate barcodes using the single or bulk methods
-2. Use the print function for label printing
-3. Optimized 3-column layout for efficient printing
+2. Select a paper template from the dropdown menu
+3. Use the print function for template-specific label printing
+4. Optimized layouts for specific label sheet formats
+
+## Paper Templates
+
+TagForge includes a flexible paper template system for printing on specific label sheets:
+
+### Available Templates
+
+- **A-ONE 72230**: A4 30-label sheet (53.3mm × 25.4mm each)
+  - 3 columns × 10 rows layout
+  - 3.8mm gaps between columns
+  - Perfect for A-ONE 72230 label sheets
+  - **Supported Barcode Types**: Code 128, Code 39 only
+
+### Template System Features
+
+- **Template Validation**: Ensures a template is selected before printing
+- **Barcode Type Restrictions**: Templates can specify supported barcode types
+- **Extensible Design**: Easy to add new templates for different label sheets
+- **Template-Specific CSS**: Each template includes complete print styling
+- **Error Handling**: Clear error messages for missing template selection and incompatible barcode types
+
+### Adding New Templates
+
+New paper templates can be easily added to the system by extending the `PaperTemplates` object in `libs/papertemplate/paper-templates.js`. Each template includes:
+
+- Template metadata (name, description, dimensions)
+- Supported barcode types (optional array of allowed barcode formats)
+- Complete CSS styling for print layout
+- Grid configuration (columns, rows, spacing)
+- Page setup (size, margins, orientation)
+
+The template file is loaded before the main application, making it easy to add new templates without modifying the core application code.
+
+#### Template Structure Example:
+```javascript
+'NEW-TEMPLATE': {
+    name: 'Template Name',
+    description: 'Template description',
+    supportedBarcodeTypes: ['CODE128', 'CODE39', 'QR'], // Optional
+    // ... other properties
+    css: `/* Complete CSS for this template */`
+}
+```
 
 ## Supported Barcode Types
 
@@ -110,7 +156,7 @@ TagForge/
 
 ## Version Information
 
-**Current Version:** 0.0.45
+**Current Version:** 0.0.48
 
 **Release Date:** July 2025
 
@@ -120,6 +166,9 @@ TagForge/
 
 ### Version History
 
+- **0.0.48** - Added barcode type restrictions to templates (A-ONE 72230 supports Code 128/39 only)
+- **0.0.47** - Added paper template system with A-ONE 72230 template, template validation and error handling
+- **0.0.46** - A4 paper print layout with exact sticker dimensions (53.3mm × 25.4mm), optimized barcode sizing
 - **0.0.45** - Removed header text, restored feature buttons, streamlined interface
 - **0.0.44** - Optimized codebase, removed unused libraries, improved print layout
 - **0.0.43** - Previous version with full feature set

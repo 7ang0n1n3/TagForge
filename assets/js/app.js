@@ -1,10 +1,14 @@
-// TagForge Application - Version 0.0.45
+// TagForge Application - Version 0.0.48
 // Main Application JavaScript
 
 class TagForge {
     constructor() {
         this.currentBarcode = null;
         this.bulkData = [];
+        
+        // Use external paper templates
+        this.paperTemplates = PaperTemplates;
+        
         this.init();
     }
 
@@ -375,10 +379,10 @@ class TagForge {
 
         const defaultSettings = {
             type: document.getElementById('bulkBarcodeType').value || 'CODE128',
-            width: parseFloat(document.getElementById('bulkWidth').value) || 2,
-            height: parseInt(document.getElementById('bulkHeight').value) || 20,
+            width: parseFloat(document.getElementById('bulkWidth').value) || 3,
+            height: parseInt(document.getElementById('bulkHeight').value) || 18,
             displayValue: document.getElementById('bulkDisplayValue').checked,
-            fontSize: parseInt(document.getElementById('bulkFontSize').value) || 20,
+            fontSize: parseInt(document.getElementById('bulkFontSize').value) || 12,
             margin: 5, // Default margin
             background: '#ffffff', // Default white background
             foreground: '#000000' // Default black foreground
@@ -514,8 +518,32 @@ class TagForge {
                 <head>
                     <title>Print Barcode - ${formData.data}</title>
                     <style>
-                        body { margin: 0; padding: 20px; text-align: center; }
-                        img { max-width: 100%; height: auto; }
+                        @page {
+                            size: A4;
+                            margin: 21.5mm 19mm 21.5mm 19mm;
+                        }
+                        
+                        body { 
+                            margin: 0; 
+                            padding: 0; 
+                            font-family: Arial, sans-serif;
+                            font-size: 8pt;
+                            text-align: center;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-height: 100vh;
+                        }
+                        
+                        img { 
+                            max-width: 53.3mm;
+                            max-height: 25.4mm;
+                            width: auto;
+                            height: auto;
+                            object-fit: contain;
+                            display: block;
+                            margin: 0 auto;
+                        }
                     </style>
                 </head>
                 <body>
@@ -550,40 +578,41 @@ class TagForge {
             return;
         }
 
+        // Get selected template
+        const templateSelect = document.getElementById('printTemplate');
+        const selectedTemplate = templateSelect ? templateSelect.value : '';
+        
+        if (!selectedTemplate) {
+            this.showAlert('Please select a paper template', 'warning');
+            return;
+        }
+        
+        const template = this.paperTemplates[selectedTemplate];
+        if (!template) {
+            this.showAlert('Selected template not found', 'error');
+            return;
+        }
+
+        // Check if template has barcode type restrictions
+        if (template.supportedBarcodeTypes) {
+            const selectedBarcodeType = document.getElementById('bulkBarcodeType').value;
+            if (!template.supportedBarcodeTypes.includes(selectedBarcodeType)) {
+                this.showAlert(`Template "${template.name}" only supports: ${template.supportedBarcodeTypes.join(', ')}`, 'warning');
+                return;
+            }
+        }
+
         const printWindow = window.open('', '_blank');
         let html = `
             <html>
                 <head>
-                    <title>Print All Barcodes</title>
+                    <title>Print All Barcodes - ${template.name}</title>
                     <style>
-                        body { margin: 0; padding: 0; }
-                        .barcode-item { 
-                            display: inline-block; 
-                            margin: 0; 
-                            padding: 0; 
-                            border: none; 
-                            text-align: center; 
-                            width: 33.33%;
-                            vertical-align: top;
-                            box-sizing: border-box;
-                        }
-                        img { 
-                            max-width: 100%; 
-                            height: auto; 
-                            display: block;
-                            margin: 0;
-                            padding: 0;
-                        }
-                        .barcode-item:nth-child(3n+2) {
-                            margin-left: -2px;
-                            margin-right: -2px;
-                        }
-                        .barcode-item:nth-child(3n+3) {
-                            margin-left: -4px;
-                        }
+                        ${template.css}
                     </style>
                 </head>
                 <body>
+                    <div style="width: 100%; height: 100%; overflow: hidden;">
         `;
 
         // Convert canvas elements to images for printing
@@ -610,7 +639,10 @@ class TagForge {
             }
         });
 
-        html += '</body></html>';
+        html += `
+                </div>
+            </body>
+        </html>`;
         
         printWindow.document.write(html);
         printWindow.document.close();

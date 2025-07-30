@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="version" content="0.0.45">
+    <meta name="version" content="0.0.48">
     <meta name="author" content="7ANG0N1N3">
     <meta name="github" content="https://github.com/tagforge/tagforge">
     <title>TagForge - Offline Barcode Generator</title>
@@ -21,6 +21,7 @@
     <script src="libs/utils/FileSaver.min.js"></script>
     
     <!-- Application Scripts -->
+    <script src="libs/papertemplate/paper-templates.js"></script>
     <script src="assets/js/barcode-fallback.js"></script>
     <script src="assets/js/app.js"></script>
 </head>
@@ -213,6 +214,22 @@
                                 </div>
                             </div>
                             
+                            <!-- Print Template Selection -->
+                            <hr class="my-4">
+                            <h5>Print Template</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="printTemplate" class="form-label">Paper Template</label>
+                                        <select class="form-select" id="printTemplate">
+                                            <option value="">--none--</option>
+                                            <option value="A-ONE-72230">A-ONE 72230</option>
+                                        </select>
+                                        <div class="form-text">Select a paper template for printing</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <!-- Barcode Configuration Options -->
                             <hr class="my-4">
                             <h5>Barcode Settings</h5>
@@ -228,13 +245,13 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="bulkWidth" class="form-label">Width</label>
-                                        <input type="range" class="form-range" id="bulkWidth" min="1" max="5" value="2" step="0.5">
-                                        <div class="form-text">Current: <span id="bulkWidthValue">2</span></div>
+                                                                <input type="range" class="form-range" id="bulkWidth" min="1" max="5" value="3" step="0.5">
+                        <div class="form-text">Current: <span id="bulkWidthValue">3</span></div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="bulkHeight" class="form-label">Height</label>
-                                        <input type="range" class="form-range" id="bulkHeight" min="5" max="30" value="20">
-                                        <div class="form-text">Current: <span id="bulkHeightValue">20px</span></div>
+                                                                <input type="range" class="form-range" id="bulkHeight" min="5" max="30" value="18">
+                        <div class="form-text">Current: <span id="bulkHeightValue">18px</span></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
