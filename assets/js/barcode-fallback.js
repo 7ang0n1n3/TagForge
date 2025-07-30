@@ -1,4 +1,4 @@
-// TagForge Barcode Generator - Version 0.0.48
+// TagForge Barcode Generator - Version 0.0.49
 // Custom barcode generation with fallback support
 
 class SimpleBarcodeGenerator {

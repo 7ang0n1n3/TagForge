@@ -1,4 +1,4 @@
-// TagForge Application - Version 0.0.48
+// TagForge Application - Version 0.0.49
 // Main Application JavaScript
 
 class TagForge {

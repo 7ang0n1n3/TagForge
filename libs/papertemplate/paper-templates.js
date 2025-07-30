@@ -1,4 +1,4 @@
-// TagForge Paper Templates - Version 0.0.48
+// TagForge Paper Templates - Version 0.0.49
 // Paper template definitions for different label sheets
 
 const PaperTemplates = {
@@ -61,6 +61,73 @@ const PaperTemplates = {
                 transform: translate(-50%, -50%);
                 max-width: 100%;
                 max-height: 100%;
+                width: auto;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+                object-fit: contain;
+            }
+        `
+    },
+    'A-ONE-31553': {
+        name: 'A-ONE 31553',
+        description: 'A4 40-label sheet (30mm × 30mm each) - Recommended for QR codes',
+        pageSize: 'A4',
+        margins: '14.5mm 22mm 14.5mm 22mm',
+        stickerWidth: '30mm',
+        stickerHeight: '30mm',
+        columnGap: '4mm',
+        rowGap: '4mm',
+        columns: 5,
+        rows: 8,
+        totalStickers: 40,
+        supportedBarcodeTypes: ['QR'],
+        css: `
+            @page {
+                size: A4;
+                margin: 14.5mm 22mm 14.5mm 22mm;
+            }
+            
+            body { 
+                margin: 0; 
+                padding: 0; 
+                font-family: Arial, sans-serif;
+                font-size: 8pt;
+                height: 268mm;
+                overflow: hidden;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+            
+            .barcode-item { 
+                display: inline-block; 
+                margin: 0; 
+                padding: 0; 
+                border: none; 
+                text-align: center; 
+                width: 30mm;
+                height: 30mm;
+                vertical-align: top;
+                box-sizing: border-box;
+                margin-right: 4mm;
+                margin-bottom: 4mm;
+                overflow: hidden;
+                position: relative;
+                page-break-inside: avoid;
+                page-break-after: avoid;
+            }
+            
+            .barcode-item:nth-child(5n) {
+                margin-right: 0;
+            }
+            
+            .barcode-item img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                max-width: 90%;
+                max-height: 90%;
                 width: auto;
                 height: auto;
                 display: block;

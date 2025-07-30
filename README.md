@@ -89,6 +89,12 @@ TagForge includes a flexible paper template system for printing on specific labe
   - Perfect for A-ONE 72230 label sheets
   - **Supported Barcode Types**: Code 128, Code 39 only
 
+- **A-ONE 31553**: A4 40-label sheet (30mm × 30mm each)
+  - 5 columns × 8 rows layout
+  - 4mm gaps between stickers
+  - Square stickers perfect for QR codes
+  - **Supported Barcode Types**: QR Code only
+
 ### Template System Features
 
 - **Template Validation**: Ensures a template is selected before printing
@@ -156,7 +162,7 @@ The template file is loaded before the main application, making it easy to add n
 
 ## Version Information
 
-**Current Version:** 0.0.48
+**Current Version:** 0.0.49
 
 **Release Date:** July 2025
 
@@ -166,6 +172,7 @@ The template file is loaded before the main application, making it easy to add n
 
 ### Version History
 
+- **0.0.49** - Added A-ONE 31553 template for QR codes (40 square stickers, 30×30mm each)
 - **0.0.48** - Added barcode type restrictions to templates (A-ONE 72230 supports Code 128/39 only)
 - **0.0.47** - Added paper template system with A-ONE 72230 template, template validation and error handling
 - **0.0.46** - A4 paper print layout with exact sticker dimensions (53.3mm × 25.4mm), optimized barcode sizing
