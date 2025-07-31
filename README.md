@@ -162,7 +162,7 @@ The template file is loaded before the main application, making it easy to add n
 
 ## Version Information
 
-**Current Version:** 0.0.49
+**Current Version:** 0.0.50
 
 **Release Date:** July 2025
 
@@ -172,6 +172,7 @@ The template file is loaded before the main application, making it easy to add n
 
 ### Version History
 
+- **0.0.50** - Added multi-page bulk print support for unlimited barcodes
 - **0.0.49** - Added A-ONE 31553 template for QR codes (40 square stickers, 30×30mm each)
 - **0.0.48** - Added barcode type restrictions to templates (A-ONE 72230 supports Code 128/39 only)
 - **0.0.47** - Added paper template system with A-ONE 72230 template, template validation and error handling

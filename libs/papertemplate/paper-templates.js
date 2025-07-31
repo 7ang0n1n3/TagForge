@@ -1,4 +1,4 @@
-// TagForge Paper Templates - Version 0.0.49
+// TagForge Paper Templates - Version 0.0.50
 // Paper template definitions for different label sheets
 
 const PaperTemplates = {
@@ -26,10 +26,18 @@ const PaperTemplates = {
                 padding: 0; 
                 font-family: Arial, sans-serif;
                 font-size: 8pt;
+            }
+            
+            .page {
+                width: 100%;
                 height: 254mm;
                 overflow: hidden;
-                page-break-after: avoid;
+                page-break-after: always;
                 page-break-inside: avoid;
+            }
+            
+            .page:last-child {
+                page-break-after: avoid;
             }
             
             .barcode-item { 
@@ -47,7 +55,6 @@ const PaperTemplates = {
                 overflow: hidden;
                 position: relative;
                 page-break-inside: avoid;
-                page-break-after: avoid;
             }
             
             .barcode-item:nth-child(3n) {
@@ -93,10 +100,18 @@ const PaperTemplates = {
                 padding: 0; 
                 font-family: Arial, sans-serif;
                 font-size: 8pt;
+            }
+            
+            .page {
+                width: 100%;
                 height: 268mm;
                 overflow: hidden;
-                page-break-after: avoid;
+                page-break-after: always;
                 page-break-inside: avoid;
+            }
+            
+            .page:last-child {
+                page-break-after: avoid;
             }
             
             .barcode-item { 
@@ -114,7 +129,6 @@ const PaperTemplates = {
                 overflow: hidden;
                 position: relative;
                 page-break-inside: avoid;
-                page-break-after: avoid;
             }
             
             .barcode-item:nth-child(5n) {

@@ -1,4 +1,4 @@
-// TagForge Application - Version 0.0.49
+// TagForge Application - Version 0.0.50
 // Main Application JavaScript
 
 class TagForge {
@@ -612,35 +612,48 @@ class TagForge {
                     </style>
                 </head>
                 <body>
-                    <div style="width: 100%; height: 100%; overflow: hidden;">
         `;
 
-        // Convert canvas elements to images for printing
-        barcodes.forEach((item, index) => {
-            const canvas = item.querySelector('canvas');
-            if (canvas && canvas.width > 0 && canvas.height > 0) {
-                const img = document.createElement('img');
-                img.src = canvas.toDataURL('image/png');
-                img.alt = `Barcode ${index + 1}`;
-                img.style.maxWidth = '100%';
-                img.style.height = 'auto';
-                
-                const barcodeDiv = document.createElement('div');
-                barcodeDiv.className = 'barcode-item';
-                barcodeDiv.appendChild(img);
-                
-                html += barcodeDiv.outerHTML;
-            } else {
-                // Add placeholder for missing barcode
-                const barcodeDiv = document.createElement('div');
-                barcodeDiv.className = 'barcode-item';
-                barcodeDiv.innerHTML = `<p style="color: red;">Barcode ${index + 1} - Error</p>`;
-                html += barcodeDiv.outerHTML;
+        // Calculate how many barcodes per page
+        const barcodesPerPage = template.totalStickers;
+        const totalPages = Math.ceil(barcodes.length / barcodesPerPage);
+
+        // Create pages
+        for (let page = 0; page < totalPages; page++) {
+            html += `<div class="page" style="page-break-after: ${page < totalPages - 1 ? 'always' : 'avoid'}; width: 100%; height: 100%; overflow: hidden;">`;
+            
+            // Add barcodes for this page
+            const startIndex = page * barcodesPerPage;
+            const endIndex = Math.min(startIndex + barcodesPerPage, barcodes.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const item = barcodes[i];
+                const canvas = item.querySelector('canvas');
+                if (canvas && canvas.width > 0 && canvas.height > 0) {
+                    const img = document.createElement('img');
+                    img.src = canvas.toDataURL('image/png');
+                    img.alt = `Barcode ${i + 1}`;
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                    
+                    const barcodeDiv = document.createElement('div');
+                    barcodeDiv.className = 'barcode-item';
+                    barcodeDiv.appendChild(img);
+                    
+                    html += barcodeDiv.outerHTML;
+                } else {
+                    // Add placeholder for missing barcode
+                    const barcodeDiv = document.createElement('div');
+                    barcodeDiv.className = 'barcode-item';
+                    barcodeDiv.innerHTML = `<p style="color: red;">Barcode ${i + 1} - Error</p>`;
+                    html += barcodeDiv.outerHTML;
+                }
             }
-        });
+            
+            html += `</div>`;
+        }
 
         html += `
-                </div>
             </body>
         </html>`;
         
